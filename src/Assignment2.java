@@ -1,7 +1,23 @@
-import java.text.DecimalFormat;
 import java.util.*;
+import java.math.*;
+
+/*
+*
+* Matthew Bozelka
+* Assignment 2 - Casino with Methods and a Class
+* 
+* Purpose: The purpose of this assignment is to get familiar with using
+* methods and classes including static methods and static/static final
+* properties
+* 
+* The program itself mimics a Casino slot machine game.
+*
+* */
 
 
+/*
+ * main class that houses the client logic and the main method
+ * */
 public class Assignment2
 {
 
@@ -16,11 +32,16 @@ public class Assignment2
    {
       
       TripleString pullString = null;
-      int bet, multiplier, winnings, totalWinnings = 0;
+      int bet, multiplier, winnings, totalWinnings = 0, pullCount = 0;
       
       do
       {
          
+         // exit if counter is greater than the max number of pulls allowed
+         if(pullCount >= TripleString.MAX_PULLS)
+            break;
+         
+         // get bet amount and end if it is 0
          bet = getBet();
          if(bet == 0)
             break;
@@ -28,12 +49,14 @@ public class Assignment2
          pullString = pull();
          multiplier = getPayMultiplier(pullString);
          winnings = bet * multiplier;
-         totalWinnings += winnings;
          TripleString.saveWinnings(winnings);
          display(pullString, winnings);
+         pullCount++;
+         totalWinnings += winnings;
          
       } while (bet != 0);
       
+      // final output after user decides to end the game
       System.out.println("\nThanks for playing at the Casino!");
       System.out.println("Your individual winnings were:");
       System.out.println(TripleString.displayWinnings());
@@ -42,6 +65,10 @@ public class Assignment2
             
    }
    
+   /*
+    * public static method that that asks the user how much they would
+    * like to bet and returns that amount as an integer. Takes no parameters
+    * */
    public static int getBet()
    {
       
@@ -64,6 +91,11 @@ public class Assignment2
       
    }
    
+   /*
+    * public static method that acts as the pull on a slot machine.
+    * returns a new TripleString object with three random
+    * strings. Takes no parameters
+    * */
    public static TripleString pull()
    {
       
@@ -77,6 +109,11 @@ public class Assignment2
       
    }
    
+   /*
+    * static method that takes a TripleString object and an integer that
+    * represents a winning amount. Then displays to the user the random
+    * String and if they won and how much.
+    * */
    public static void display (TripleString thePull, int winnings )
    {
       
@@ -86,12 +123,18 @@ public class Assignment2
       if(winnings == 0)
          System.out.println("sorry, you lose.");
       else
-         System.out.println("congratulations, you win:" + winnings);
+         System.out.println("congratulations, you win: " + winnings);
       
       System.out.println("");
       
    }
    
+   /*
+    * static method that determines how much to multiply the winnings by
+    * based on the order and value of the random strings from a TripleString
+    * object. Takes a TripleString object and returns an integer that is the
+    * amount to multiply the winning by.
+    * */
    private static int getPayMultiplier(TripleString thePull)
    {
       
@@ -120,11 +163,14 @@ public class Assignment2
       
    }
    
+   /*
+    * static method that determines a random string based on probability.
+    * It returns a string.
+    * */
    private static String randString()
    {
       
-      Random randomGenerator = new Random();
-      double randomDb = randomGenerator.nextDouble() * 100;
+      double randomDb = Math.random() * 100;
             
       if( randomDb > 50.0 && randomDb <= 75.0 )
          return CHERRIES;
@@ -141,21 +187,27 @@ public class Assignment2
 
 
 /*
- * TripleString class*
+ * TripleString class
  */
 class TripleString
 {
    
+   // public static finals to help
    public static final int MAX_LEN = 20;
    public static final int MAX_PULLS = 40;
    
-   private static int[] pullWinnings =new int[MAX_PULLS];
+   // private static properties
+   private static int[] pullWinnings = new int[MAX_PULLS];
    private static int numPulls = 0;
-         
+   
+   // private strings. main 3 strings that a TripleString object represents
    private String string1;
    private String string2;
    private String string3;
    
+   /*
+    * default constructor. Sets the private members to an empty string.
+    * */
    public TripleString()
    {
       
@@ -165,6 +217,10 @@ class TripleString
       
    }
    
+   /*
+    * helper private function that tests if a string passed to it is valid.
+    * String cannot be null or greater than MX_LEN. returns a boolean.
+    * */
    private boolean validString( String str )
    {
       
@@ -175,6 +231,12 @@ class TripleString
       
    }
    
+   /*
+    * public static method to save winnings. static because it saves the 
+    * winnings of all TripleString objects generated by a players game.
+    * Takes an integer that represents the winning amount and stores it
+    * into pullWinnings array
+    * */
    public static void saveWinnings(int winnings)
    {
       
@@ -186,6 +248,11 @@ class TripleString
       
    }
    
+   /*
+    * public static method used to display all the winnings in the game.
+    * returns a string that is a visual representation of all the winnings
+    * stored in pullWinnings
+    * */
    public static String displayWinnings()
    {
       
@@ -201,28 +268,46 @@ class TripleString
       
    }
    
+   /*
+    * public method that returns all three private Strings as one string.
+    * */
    public String toString() 
    {
       return string1 + " | " + string2 + " | " + string3;
    }
    
    /*getter functions*/
+   
+   /*
+    * public method. returns private String1
+    * */
    public String getString1()
    {
        return string1;
    }
    
+   /*
+    * public method. returns private String2
+    * */
    public String getString2()
    {
        return string2;
    }
    
+   /*
+    * public method. returns private String3
+    * */
    public String getString3()
    {
        return string3;
    }
    
    /*setter functions*/
+   
+   /*
+    * public method. Takes a string and sets Private String1 to that value.
+    * Returns a boolean to determine if successful.
+    * */
    public boolean setString1(String str)
    {
       
@@ -236,6 +321,10 @@ class TripleString
       
    }
    
+   /*
+    * public method. Takes a string and sets Private String2 to that value.
+    * Returns a boolean to determine if successful.
+    * */
    public boolean setString2(String str)
    {
       
@@ -249,6 +338,10 @@ class TripleString
       
    }
    
+   /*
+    * public method. Takes a string and sets Private String3 to that value.
+    * Returns a boolean to determine if successful.
+    * */
    public boolean setString3(String str)
    {
       
