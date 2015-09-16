@@ -1,5 +1,5 @@
 import java.util.*;
-import java.math.*;
+import java.lang.Math;
 
 /*
 *
@@ -62,6 +62,7 @@ public class Assignment2
       System.out.println(TripleString.displayWinnings());
       System.out.println("Your total winnings were: $" + totalWinnings);    
       keyboard.close();
+      System.exit(0);
             
    }
    
